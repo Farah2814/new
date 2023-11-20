@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Subscription</title>
+</head>
+
+<body>
+    <section id="newsletter" class="section-p1 section-m1">
+        <div class="newstext">
+            <h4>Sign up for the newsletter</h4>
+            <p>Get email updates about our latest offerings and discounts</p>
+        </div>
+        <div class="form">
+            <form id="subscribeForm" method="post">
+                <input type="email" id="emailInput" placeholder="Your email address" required>
+                <button type="submit" class="normal">Sign Up</button>
+                <p id="error-message" style="color: red;"></p>
+            </form>
+        </div>
+
+        <script>
+            document.getElementById('subscribeForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const email = document.getElementById('emailInput').value;
+
+                try {
+                    const response = await fetch('/subscribe', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email: email })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert(data.message); // Subscription successful, show a message to the user
+                    } else {
+                        document.getElementById('error-message').textContent = data.error; // Show error message
+                    }
+                } catch (error) {
+                    console.error('Error occurred:', error);
+                    document.getElementById('error-message').textContent = 'Internal Server Error';
+                }
+            });
+        </script>
+    </section>
+</body>
+
+</html>
